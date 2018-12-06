@@ -12,11 +12,11 @@
     let storeLinksData = {
         ios: {
             url: "https://itunes.apple.com/us/app/gardenscapes-new-acres/id1105855019?mt=8",
-            text: "Play in Apple Store!"
+            text: "Try this game in Apple Store!"
         },
         android: {
             url: "https://play.google.com/store/apps/details?id=com.playrix.gardenscapes&amp;hl=en",
-            text: "Play in Google Play!"
+            text: "Try this game in Google Play!"
         }
     };
 
@@ -108,7 +108,7 @@
                         col = Math.floor(pointer.x / gemSize),
                         pickedGem = this.gemAt(row, col);
 
-                    if(pickedGem === -1) return this;
+                    if(pickedGem === -1 || pickedGem.gemSprite.alpha < 1) return this;
 
 
 
