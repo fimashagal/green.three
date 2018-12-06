@@ -1,0 +1,45 @@
+.section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    left: 0;
+    top: 0;
+    color: #fff;
+    text-shadow: 0 0 10px #38fbb3;
+}
+
+.section a {
+    color: #fff;
+    text-shadow: 0 0 10px #38fbb3;
+}
+
+.section-canvas {
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .2s linear;
+}
+
+.section-canvas.on {
+    opacity: 1;
+}
+
+.section-canvas > canvas {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.section-store-link {
+    pointer-events: none;
+    z-index: 2;
+}
+
+.section-store-link > a {
+    position: absolute;
+    bottom: 1.5em;
+    pointer-events: all;
+    left:50%;
+    transform: translateX(-50%);
+}

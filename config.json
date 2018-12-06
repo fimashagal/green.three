@@ -1,0 +1,9 @@
+{
+  "fieldSize": 8,
+  "gemTypes": 4,
+  "gemSize": 64,
+  "swapSpeed": 300,
+  "fallSpeed": 100,
+  "destroySpeed": 200,
+  "spriteURL": "assets/sprite.png"
+}
