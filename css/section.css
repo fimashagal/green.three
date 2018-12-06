@@ -34,6 +34,8 @@
 .section-store-link {
     pointer-events: none;
     z-index: 2;
+    text-align: center;
+    line-height: 1.1;
 }
 
 .section-store-link > a {
