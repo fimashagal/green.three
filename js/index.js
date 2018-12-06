@@ -133,12 +133,13 @@
                 return this;
             }
             startSwipe(pointer){
-                for(let array of this.gemArray){
-                    for(let gem of array){
-                        gem.gemSprite.alpha = 1;
-                    }
-                }
+
                 if(this.dragging && Typo.isDef(this.selectedGem)){
+                    for(let array of this.gemArray){
+                        for(let gem of array){
+                            gem.gemSprite.alpha = 1;
+                        }
+                    }
                     const {gemSize} = options,
                           {x, y, downX, downY} = pointer;
                     let delta = {
