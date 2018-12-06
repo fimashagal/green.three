@@ -20,16 +20,16 @@
         }
     };
 
-    const dir = {
-        horizontal: 1,
-        vertical: 2
-    };
-
     fetch("https://api.myjson.com/bins/uz8vi")
         .then(response => response.json())
         .then(main);
 
     function main(options = {}) {
+
+        const dir = {
+            horizontal: 1,
+            vertical: 2
+        };
 
         class Playground extends Phaser.Scene {
             constructor(){
@@ -44,13 +44,21 @@
             }
             create(){
                 this.gemArray = [];
-                this.tutorialAllowedGems = [];
+                this.tutorial = {
+                    allowedGems: []
+                };
                 this.poolArray = [];
                 this.score = 0;
                 this.gemGroup = this.add.group();
                 this.canPick = true;
                 this.dragging = false;
                 this.selectedGem = null;
+                this.tutorial.text = this.add.text(256, 0, 'Swipe one of this for match')
+                                            .setFontSize(20)
+                                            .setFontFamily('monospace')
+                                            .setColor('#ffffff')
+                                            .setOrigin(0.5).setShadow(0, 0, "#38fbb3", 5, true, true);
+                this.tutorial.text.alpha = 0;
                 this.input.on("pointerdown", this.gemSelect, this);
                 this.input.on("pointermove", this.startSwipe, this);
                 this.input.on("pointerup", this.stopSwipe, this);
@@ -138,8 +146,10 @@
                     for(let array of this.gemArray){
                         for(let gem of array){
                             gem.gemSprite.alpha = 1;
+
                         }
                     }
+                    this.tutorial.text.destroy();
                     const {gemSize} = options,
                           {x, y, downX, downY} = pointer;
                     let delta = {
@@ -406,12 +416,27 @@
                 this.canPick = false;
                 setTimeout(() => {
                     this.showSuggestion();
+                    this.tutorial.allowedGems = this.tutorial.allowedGems.sort((a, b) => {
+                        if(Typo.isNumbers(a.gemSprite.y, b.gemSprite.y)){
+                            return a.gemSprite.y < b.gemSprite.y;
+                        }
+                    });
+                    let maxY = this.tutorial.allowedGems[0].gemSprite.y,
+                        minY = this.tutorial.allowedGems[1].gemSprite.y;
+                    this.tutorial.text.y = maxY > 256 ? minY - 100 : 256;
+                    this.tweens.add({
+                        targets: this.tutorial.text,
+                        alpha: 1,
+                        duration: 500,
+                        callbackScope: this
+                    });
+
                 }, 1000);
                 return this;
             }
             showSuggestion(){
                 let matchFound = false;
-                const {gemArray} = this;
+                const {gemArray, tutorial, tweens} = this;
                 const {fieldSize} = options;
                 for(let i = 0; i < fieldSize - 1; i ++){
                     for(let j = 0; j < fieldSize - 1; j ++){
@@ -419,8 +444,8 @@
                         if(this.matchInBoard()){
                             let gemA = gemArray[i][j],
                                 gemB = gemArray[i + 1][j];
-
-                            fadeNotAllowed(gemA, gemB);
+                            this.tutorial.allowedGems.push(gemA, gemB);
+                            fadeNotAllowed();
                             this.tweenGem(gemA, gemB, true).tweenGem(gemB, gemA, true);
 
                             matchFound = true;
@@ -435,8 +460,8 @@
                         if(this.matchInBoard()){
                             let gemA = gemArray[i][j],
                                 gemB = gemArray[i][j + 1];
-
-                            fadeNotAllowed(gemA, gemB);
+                            this.tutorial.allowedGems.push(gemA, gemB);
+                            fadeNotAllowed();
                             this.tweenGem(gemA, gemB, true).tweenGem(gemB, gemA, true);
                             matchFound = true;
                         }
@@ -448,12 +473,15 @@
                     }
                 }
 
-                function fadeNotAllowed(...allowed) {
+                function fadeNotAllowed() {
                     for(let array of gemArray){
                         for(let gem of array){
-                            if(!allowed.includes(gem)){
-                                gem.gemSprite.alpha = .5;
-                            }
+                            !tutorial.allowedGems.includes(gem)
+                                && tweens.add({
+                                    targets: gem.gemSprite,
+                                    alpha: .1,
+                                    duration: 250
+                                });
                         }
                     }
                 }
