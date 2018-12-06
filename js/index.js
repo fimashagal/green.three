@@ -12,11 +12,11 @@
     let storeLinksData = {
         ios: {
             url: "https://itunes.apple.com/us/app/gardenscapes-new-acres/id1105855019?mt=8",
-            text: "Try this game in Apple Store!"
+            text: "Try this game in&nbsp;Apple&nbsp;Store!"
         },
         android: {
             url: "https://play.google.com/store/apps/details?id=com.playrix.gardenscapes&amp;hl=en",
-            text: "Try this game in Google Play!"
+            text: "Try this game in&nbsp;Google&nbsp;Play!"
         }
     };
 
